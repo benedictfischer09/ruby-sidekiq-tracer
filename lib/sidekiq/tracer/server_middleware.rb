@@ -14,7 +14,7 @@ module Sidekiq
         parent_span_context = extract(job)
 
         span = tracer.start_span(operation_name(job),
-                                 child_of: parent_span_context,
+                                 follows_from: parent_span_context,
                                  tags: tags(job, 'consumer'))
 
         yield
