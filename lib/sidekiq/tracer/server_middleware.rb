@@ -15,7 +15,7 @@ module Sidekiq
 
         span = tracer.start_span(operation_name(job),
                                  child_of: parent_span_context,
-                                 tags: tags(job, 'producer'))
+                                 tags: tags(job, 'consumer'))
 
         yield
       rescue Exception => e
