@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "sidekiq/tracer/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "sidekiq-opentracing-dox-fork"
+  spec.name          = "sidekiq-instrumentation"
   spec.version       = Sidekiq::Tracer::VERSION
   spec.authors       = ["iaintshine", "Doximity"]
   spec.email         = ["ops@doximity.com"]
@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 2.2.0"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
+    f.match(%r{^(bin|test|spec|features|vendor|tasks|tmp)/})
   end
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
@@ -26,9 +26,12 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'opentracing', '>= 0.3.1'
   spec.add_dependency 'sidekiq'
 
+  spec.add_development_dependency "bundler", "~> 1.17"
+  spec.add_development_dependency "dox-style"
+  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rspec_junit_formatter"
+  spec.add_development_dependency "sdoc"
   spec.add_development_dependency "test-tracer", "~> 1.0", ">= 1.2.1"
   spec.add_development_dependency "tracing-matchers", "~> 1.0", ">= 1.3.0"
-  spec.add_development_dependency "bundler", "~> 1.15"
-  spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
 end
