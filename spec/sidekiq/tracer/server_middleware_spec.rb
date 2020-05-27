@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 RSpec.describe Sidekiq::Tracer::ServerMiddleware do
@@ -62,9 +64,11 @@ RSpec.describe Sidekiq::Tracer::ServerMiddleware do
     TestJob.perform_async("value1", "value2", 1)
   end
 
+  # rubocop:disable RSpec/LeakyConstantDeclaration
   class TestJob
     include Sidekiq::Worker
 
     def perform(*args); end
   end
+  # rubocop:enable RSpec/LeakyConstantDeclaration
 end
