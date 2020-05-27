@@ -45,7 +45,7 @@ jobs:
             - v1-bundle-{{ checksum "Gemfile.lock" }}-
       - run:
           name: Install Ruby Dependencies
-          command: bundle check --path=vendor/bundle || bundle install --local --frozen --path=vendor/bundle --jobs=4 --retry=3 && bundle clean
+          command: bundle check --path=vendor/bundle || bundle install --local --frozen --path=vendor/bundle --jobs=4 --retry=3
       - save_cache:
           key: v1-bundle-{{ checksum "Gemfile.lock" }}-
           paths:
@@ -57,6 +57,9 @@ jobs:
           name: Store test results
           path: tmp/test-results
       - run:
+          name: Run Rubocop
+          command: bundle exec rake ci:rubocop
+      - run:
           name: Build documentation
           command: bundle exec rake ci:doc
       - store_artifacts:
@@ -66,6 +69,7 @@ jobs:
           root: .
           paths:
             - vendor/bundle
+      
 
 workflows:
   version: 2
