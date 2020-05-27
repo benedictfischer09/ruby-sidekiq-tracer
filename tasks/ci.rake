@@ -1,4 +1,3 @@
-
 namespace :ci do
   desc "Run specs"
   task :specs do

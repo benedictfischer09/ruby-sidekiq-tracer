@@ -30,8 +30,8 @@ RSpec.describe Sidekiq::Tracer::ClientMiddleware do
 
     it "sets standard OT tags" do
       [
-        ['component', 'Sidekiq'],
-        ['span.kind', 'producer']
+        %w[component Sidekiq],
+        ["span.kind", "producer"]
       ].each do |key, value|
         expect(tracer).to have_span.with_tag(key, value)
       end
@@ -39,10 +39,10 @@ RSpec.describe Sidekiq::Tracer::ClientMiddleware do
 
     it "sets Sidekiq specific OT tags" do
       [
-        ['sidekiq.queue', 'default'],
-        ['sidekiq.retry', "true"],
-        ['sidekiq.args', "value1, value2, 1"],
-        ['sidekiq.jid', /\S+/]
+        ["sidekiq.queue", "default"],
+        ["sidekiq.retry", "true"],
+        ["sidekiq.args", "value1, value2, 1"],
+        ["sidekiq.jid", /\S+/]
       ].each do |key, value|
         expect(tracer).to have_span.with_tag(key, value)
       end
@@ -77,7 +77,7 @@ RSpec.describe Sidekiq::Tracer::ClientMiddleware do
       enqueued_span = tracer.finished_spans.last
 
       job = TestJob.jobs.last
-      carrier = job['Trace-Context']
+      carrier = job["Trace-Context"]
       extracted_span_context = tracer.extract(OpenTracing::FORMAT_TEXT_MAP, carrier)
 
       expect(enqueued_span.context).to eq(extracted_span_context)
@@ -91,7 +91,6 @@ RSpec.describe Sidekiq::Tracer::ClientMiddleware do
   class TestJob
     include Sidekiq::Worker
 
-    def perform(*args)
-    end
+    def perform(*args); end
   end
 end

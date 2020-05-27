@@ -10,24 +10,24 @@ module Sidekiq
         @active_span = active_span
       end
 
-      def call(worker, job, queue)
+      def call(_worker, job, _queue)
         parent_span_context = extract(job)
 
         follows_from = OpenTracing::Reference.follows_from(parent_span_context)
-        
+
         span = tracer.start_span(operation_name(job),
                                  references: [follows_from],
-                                 tags: tags(job, 'consumer'))
+                                 tags: tags(job, "consumer"))
 
         yield
       rescue Exception => e
         if span
-          span.set_tag('error', true)
-          span.log(event: 'error', :'error.object' => e)
+          span.set_tag("error", true)
+          span.log(event: "error", 'error.object': e)
         end
         raise
       ensure
-        span.finish if span
+        span&.finish
       end
 
       private
