@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 RSpec.describe Sidekiq::Tracer::ServerMiddleware do
@@ -20,8 +22,8 @@ RSpec.describe Sidekiq::Tracer::ServerMiddleware do
 
     it "sets standard OT tags" do
       [
-        ['component', 'Sidekiq'],
-        ['span.kind', 'consumer']
+        %w[component Sidekiq],
+        ["span.kind", "consumer"]
       ].each do |key, value|
         expect(tracer).to have_span.with_tag(key, value)
       end
@@ -29,10 +31,10 @@ RSpec.describe Sidekiq::Tracer::ServerMiddleware do
 
     it "sets Sidekiq specific OT tags" do
       [
-        ['sidekiq.queue', 'default'],
-        ['sidekiq.retry', "true"],
-        ['sidekiq.args', "value1, value2, 1"],
-        ['sidekiq.jid', /\S+/]
+        ["sidekiq.queue", "default"],
+        ["sidekiq.retry", "true"],
+        ["sidekiq.args", "value1, value2, 1"],
+        ["sidekiq.jid", /\S+/]
       ].each do |key, value|
         expect(tracer).to have_span.with_tag(key, value)
       end
@@ -62,10 +64,11 @@ RSpec.describe Sidekiq::Tracer::ServerMiddleware do
     TestJob.perform_async("value1", "value2", 1)
   end
 
+  # rubocop:disable RSpec/LeakyConstantDeclaration
   class TestJob
     include Sidekiq::Worker
 
-    def perform(*args)
-    end
+    def perform(*args); end
   end
+  # rubocop:enable RSpec/LeakyConstantDeclaration
 end

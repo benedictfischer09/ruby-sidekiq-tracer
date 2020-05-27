@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sidekiq
   module Tracer
     class ServerMiddleware
@@ -10,28 +12,33 @@ module Sidekiq
         @active_span = active_span
       end
 
-      def call(worker, job, queue)
+      def call(_worker, job, _queue)
+        span = build_span(job)
+
+        yield
+      rescue StandardError => e
+        tag_errors(span, e) if span
+        raise
+      ensure
+        span&.finish
+      end
+
+      private
+
+      def build_span(job)
         parent_span_context = extract(job)
 
         follows_from = OpenTracing::Reference.follows_from(parent_span_context)
 
-        span = tracer.start_span(operation_name(job),
-                                 references: [follows_from],
-                                 ignore_active_scope: true,
-                                 tags: tags(job, 'consumer'))
-
-        yield
-      rescue Exception => e
-        if span
-          span.set_tag('error', true)
-          span.log(event: 'error', :'error.object' => e)
-        end
-        raise
-      ensure
-        span.finish if span
+        tracer.start_span(operation_name(job),
+                          references: [follows_from],
+                          tags: tags(job, "consumer"))
       end
 
-      private
+      def tag_errors(span, error)
+        span.set_tag("error", true)
+        span.log(event: "error", 'error.object': error)
+      end
 
       def extract(job)
         carrier = job[TRACE_CONTEXT_KEY]

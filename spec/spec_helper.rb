@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require "bundler/setup"
 require "tracing-matchers"
 require "sidekiq/testing"
-require "sidekiq-opentracing"
-require "pry"
+require "sidekiq/tracer"
 
 # patch the test tracer to accept and ignore the :ignore_active_scope argument. This is ugly but necessary
 # to avoid forking and updating the test-tracer gem to handle the latest version of OpenTracing
@@ -26,7 +27,7 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 
-  config.before(:each) do
+  config.before do
     Sidekiq::Worker.clear_all
   end
 end
