@@ -29,8 +29,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rspec_junit_formatter"
-  spec.add_development_dependency "sidekiq"
   spec.add_development_dependency "sdoc"
+  spec.add_development_dependency "sidekiq"
   spec.add_development_dependency "test-tracer", "~> 1.0", ">= 1.2.1"
   spec.add_development_dependency "tracing-matchers", "~> 1.0", ">= 1.3.0"
 end
