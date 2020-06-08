@@ -33,6 +33,3 @@
 
   Rails:
     Enabled: false
-
-  Naming/FileName:
-    Enabled: false
