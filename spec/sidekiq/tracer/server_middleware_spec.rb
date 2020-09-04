@@ -4,6 +4,13 @@ require "spec_helper"
 
 RSpec.describe Sidekiq::Tracer::ServerMiddleware do
   let(:tracer) { Test::Tracer.new }
+  let(:TestJob) do
+    Class.new do
+      include Sidekiq::Worker
+
+      def perform(*args); end
+    end.new
+  end
 
   describe "auto-instrumentation" do
     before do
@@ -41,16 +48,22 @@ RSpec.describe Sidekiq::Tracer::ServerMiddleware do
     end
   end
 
+  # The double in this test is standing in for a lambda, so it doesn't make a
+  # ton of sense to use a verified double here. Disabling the verified doubles
+  # cop
+  # rubocop:disable RSpec/VerifiedDoubles
   describe "after trace hook" do
     it "calls hook if defined" do
-      after_trace = double("after_trace")
-      expect(after_trace).to receive(:call)
+      after_trace = spy("after_trace")
 
       schedule_test_job
       Sidekiq::Tracer.instrument_server(tracer: tracer, after_trace: after_trace)
       TestJob.drain
+
+      expect(after_trace).to have_received(:call)
     end
   end
+  # rubocop:enable RSpec/VerifiedDoubles
 
   describe "trace context propagation" do
     let(:root_span) { tracer.start_span("root") }
@@ -73,10 +86,5 @@ RSpec.describe Sidekiq::Tracer::ServerMiddleware do
 
   def schedule_test_job
     TestJob.perform_async("value1", "value2", 1)
-  end
-  class TestJob
-    include Sidekiq::Worker
-
-    def perform(*args); end
   end
 end
