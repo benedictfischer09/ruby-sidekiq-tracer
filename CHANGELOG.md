@@ -2,7 +2,7 @@
 Changelog
 =========
 
-## 1.2.2.ejacobs1 09/08/2020
+## 1.2.2.ejacobs2 09/08/2020
   * Add optional after_trace hook to ClientMiddleware
 
 ## 1.2.1 07/09/2020
