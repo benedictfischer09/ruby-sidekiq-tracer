@@ -2,7 +2,7 @@
 Changelog
 =========
 
-## 2.0.0.pre1 09/26/2022
+## 2.0.0 09/26/2022
   * Update for Ruby 3 compatibiity
   * Middlewares now take positional arguments rather than using keywords
 
