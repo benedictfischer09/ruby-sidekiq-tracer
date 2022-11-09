@@ -1,0 +1,11 @@
+name: '[UI] Gem release (Pre)'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  gem_release_pre:
+    uses: doximity/dox-gh-shared-workflows/.github/workflows/gem_release_pre.yml@master
+    secrets:
+      NEXUS_PUSH_USER: ${{ secrets.NEXUS_PUSH_USER }}
+      NEXUS_PUSH_PASS: ${{ secrets.NEXUS_PUSH_PASS }}
