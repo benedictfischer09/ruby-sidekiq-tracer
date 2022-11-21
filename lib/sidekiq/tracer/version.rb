@@ -2,6 +2,6 @@
 
 module Sidekiq
   module Tracer
-    VERSION = "2.1.0.pre2"
+    VERSION = "2.1.0.pre3"
   end
 end

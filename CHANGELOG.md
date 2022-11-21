@@ -1,7 +1,7 @@
 
 Changelog
 =========
-## 2.1.0.pre2 11/14/2022
+## 2.1.0.pre3 11/14/2022
   * Fix compatibility issues in server & client middleware by removing deprecated #log in favor of #log_kv
 
 ## 2.0.0 09/26/2022
