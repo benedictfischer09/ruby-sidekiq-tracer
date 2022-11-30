@@ -1,6 +1,8 @@
 
 Changelog
 =========
+## 2.1.0 11/29/2022
+  * Fix compatibility issues in server & client middleware by removing deprecated #log in favor of #log_kv
 
 ## 2.0.0 09/26/2022
   * Update for Ruby 3 compatibiity
