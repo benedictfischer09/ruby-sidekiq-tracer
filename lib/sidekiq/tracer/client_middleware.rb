@@ -29,7 +29,6 @@ module Sidekiq
 
       def build_span(job)
         tracer.start_span(operation_name(job),
-                          child_of: active_span.respond_to?(:call) ? active_span.call : active_span,
                           tags: tags(job, "producer"))
       end
 
