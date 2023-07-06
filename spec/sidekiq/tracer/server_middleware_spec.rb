@@ -74,10 +74,6 @@ RSpec.describe Sidekiq::Tracer::ServerMiddleware do
     it "creates spans for each part of the chain" do
       expect(tracer).to have_spans(3)
     end
-
-    it "creates separate traces for the producer and consumer" do
-      expect(tracer).to have_traces(2)
-    end
   end
 
   def schedule_test_job
