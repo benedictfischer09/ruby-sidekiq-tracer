@@ -1,6 +1,9 @@
 
 Changelog
 =========
+## 2.2.0 07/06/2023
+  * Stop using the follows from relationship for sidekiq job executions
+
 ## 2.1.0 11/29/2022
   * Fix compatibility issues in server & client middleware by removing deprecated #log in favor of #log_kv
 

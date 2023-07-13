@@ -51,24 +51,6 @@ RSpec.describe Sidekiq::Tracer::ClientMiddleware do
     end
   end
 
-  describe "active span propagation" do
-    let(:root_span) { tracer.start_span("root") }
-
-    before do
-      Sidekiq::Tracer.instrument_client(tracer: tracer, active_span: -> { root_span })
-      schedule_test_job
-    end
-
-    it "creates the new span with active span trace_id" do
-      expect(tracer).to have_traces(1)
-      expect(tracer).to have_spans(2)
-    end
-
-    it "creates the new span with active span as a parent" do
-      expect(tracer).to have_span.with_parent(root_span)
-    end
-  end
-
   describe "span context injection" do
     before do
       Sidekiq::Tracer.instrument_client(tracer: tracer)

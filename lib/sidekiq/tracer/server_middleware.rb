@@ -15,12 +15,7 @@ module Sidekiq
 
       # rubocop:disable Metrics/MethodLength
       def call(_worker, job, _queue)
-        parent_span_context = extract(job)
-
-        follows_from = OpenTracing::Reference.follows_from(parent_span_context)
-
         tracer.start_active_span(operation_name(job),
-                                 references: [follows_from],
                                  ignore_active_scope: true,
                                  tags: tags(job, "consumer")) do |scope|
           begin
@@ -40,13 +35,6 @@ module Sidekiq
       def tag_errors(span, error)
         span.set_tag("error", true)
         span.log_kv(**{ event: "error", 'error.object': error })
-      end
-
-      def extract(job)
-        carrier = job[TRACE_CONTEXT_KEY]
-        return unless carrier
-
-        tracer.extract(OpenTracing::FORMAT_TEXT_MAP, carrier)
       end
     end
   end
