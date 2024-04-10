@@ -1,0 +1,16 @@
+name: 'Gem release (Final - Publish)'
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  gem_release_final:
+    uses: doximity/dox-gh-shared-workflows/.github/workflows/gem_release_final_publish.yml@master
+    permissions:
+      contents: write
+      pull-requests: write
+    secrets:
+      NEXUS_PUSH_USER: ${{ secrets.NEXUS_PUSH_USER }}
+      NEXUS_PUSH_PASS: ${{ secrets.NEXUS_PUSH_PASS }}

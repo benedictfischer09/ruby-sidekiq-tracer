@@ -1,0 +1,27 @@
+name: '[UI] Gem release (Final - PR)'
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+        - minor
+        - major
+        - patch
+
+jobs:
+  open_pull_request:
+    uses: doximity/dox-gh-shared-workflows/.github/workflows/gem_release_final_pr_creation.yml@master
+    with:
+      release_type: ${{ github.event.inputs.release_type }}
+      run_bundle_install: false
+    permissions:
+      contents: write
+      pull-requests: write
+    secrets:
+      NEXUS_PULL_USER: ${{ secrets.NEXUS_PULL_USER }}
+      NEXUS_PULL_PASS: ${{ secrets.NEXUS_PULL_PASS }}
